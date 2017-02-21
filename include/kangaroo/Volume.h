@@ -55,7 +55,7 @@ struct Volume
 
     inline __device__ __host__
     Volume(T* ptr, size_t w, size_t h, size_t d)
-        : pitch(sizeof(T)*w), ptr(ptr), w(w), h(h), img_pitch(sizeof(T)*w*h)
+        : pitch(sizeof(T)*w), ptr(ptr), w(w), h(h), img_pitch(sizeof(T)*w*h), d(d)
     {
     }
 
