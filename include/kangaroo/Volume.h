@@ -14,6 +14,7 @@
 #include <kangaroo/Image.h>
 #include <kangaroo/Mat.h>
 #include "sampling.h"
+#include "launch_utils.h"
 
 namespace roo
 {
@@ -88,22 +89,25 @@ struct Volume
         // we need to do a copy for each depth layer.
         assert(w == img.w);
         assert(h == img.h);
-        assert(img_pitch == img.img_pitch);
-        cudaMemcpy2D(ptr,pitch,img.ptr,img.pitch, std::min(img.w,w)*sizeof(T), h*std::min(img.d,d), TargetCopyKind<Target,TargetFrom>() );
+        //assert(img_pitch == img.img_pitch);
+        const cudaError err = cudaMemcpy2D(ptr,pitch,img.ptr,img.pitch, std::min(img.w,w)*sizeof(T), h*std::min(img.d,d), TargetCopyKind<Target,TargetFrom>() );
+        GpuCheckSuccess(err);
     }
 
     template <typename DT>
     inline __host__
     void MemcpyFromHost(DT* hptr, size_t hpitch )
     {
-        cudaMemcpy2D( (void*)ptr, pitch, hptr, hpitch, w*sizeof(T), h*d, cudaMemcpyHostToDevice );
+        const cudaError err = cudaMemcpy2D( (void*)ptr, pitch, hptr, hpitch, w*sizeof(T), h*d, cudaMemcpyHostToDevice );
+        GpuCheckSuccess(err);
     }
 
     template <typename DT>
     inline __host__
     void MemcpyFromHost(DT* ptr )
     {
-        MemcpyFromHost(ptr, w*sizeof(T) );
+        const cudaError err = MemcpyFromHost(ptr, w*sizeof(T) );
+        GpuCheckSuccess(err);
     }
 
     //////////////////////////////////////////////////////
