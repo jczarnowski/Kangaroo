@@ -138,7 +138,13 @@ set(HAVE_NPP 1)
 set(CUDA_PROPAGATE_HOST_FLAGS off)
 
 # Generate code for 2.0 and 3.0 CUDA compute architectures (TODO: Verify this works)
-set(CUDA_NVCC_FLAGS "-use_fast_math -gencode arch=compute_30,code=sm_30 -gencode arch=compute_20,code=sm_20" )
+set(CUDA_NVCC_FLAGS 
+  "-use_fast_math"
+  "-gencode arch=compute_30,code=sm_30"
+  "-gencode arch=compute_50,code=sm_50"
+  "-gencode arch=compute_52,code=sm_52"
+  "-gencode arch=compute_61,code=sm_61"
+)
 
 # Make sure that NPP is found
 if(NOT CUDA_npp_LIBRARY)
